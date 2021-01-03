@@ -31,7 +31,9 @@ router.register(r'organizations', views.OrganizationViewSet)
 router.register(r'tasks', views.TaskViewSet)
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('token/', views.WaveTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
+    
 ]
