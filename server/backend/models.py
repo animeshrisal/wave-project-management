@@ -1,23 +1,25 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from .enums import *
+from .helpers import TimeStampedModel
 
-class Organization(models.Model):
+class Organization(TimeStampedModel):
     name = models.CharField(max_length=100)
 
-class Project(models.Model):
+class Project(TimeStampedModel):
     name = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
     projects = models.ManyToManyField(Project)
+    confirmation_token = models.CharField(max_length=500)
+    confirmed_at = models.DateTimeField()
 
     def __str__(self):
         return str(self.id)
 
-class Task(models.Model):
-
+class Task(TimeStampedModel):
     task_status = (
         (TaskStatus.TODO, 'Todo'),
         (TaskStatus.IN_PROGRESS, 'In Progress'),
