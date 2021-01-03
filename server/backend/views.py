@@ -10,6 +10,7 @@ from .serializers import TaskSerializer, OrganizationSerializer, ProjectSerializ
 from .helpers import StandardResultsSetPagination, WavePermissions
 from django.contrib.auth.models import Group, Permission
 from .models import Organization, Project, Task, User
+from django.db import transaction
 
 class WaveTokenObtainPairView(TokenObtainPairView):
     serializer_class = WaveTokenObtainPairSerializer

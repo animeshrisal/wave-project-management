@@ -8,8 +8,6 @@ from rest_framework import exceptions
 from .models import Organization, Project, Task, User
 
 from .helpers import StandardResultsSetPagination
-from django.db import transaction
-
 
 class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):

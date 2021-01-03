@@ -15,10 +15,11 @@ class Project(TimeStampedModel):
 
 class WaveUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        user = self._create_user(username, email, password, **extra_fields)
-        user.invite_user()
+        with transaction.atomic():
+            extra_fields.setdefault('is_staff', False)
+            extra_fields.setdefault('is_superuser', False)
+            user = self._create_user(username, email, password, **extra_fields)
+            user.invite_user()
 
 class User(AbstractUser):
     objects = WaveUserManager()
@@ -50,7 +51,7 @@ class User(AbstractUser):
         user.confirm_invitation()
 
     def __str__(self):
-        return str(self.id)
+        return str(self.id) + " - " + str(self.username) 
 
 class Task(TimeStampedModel):
     task_status = (
