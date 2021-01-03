@@ -11,6 +11,9 @@ from .helpers import StandardResultsSetPagination
 class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
+
+        self.check_confirmation()
+
         refresh = self.get_token(self.user)
         data['refresh'] = str(refresh)
         data['access'] = str(refresh.access_token)
@@ -22,6 +25,14 @@ class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
         data['last_name'] = self.user.last_name
 
         return data
+
+    def check_confirmation():
+        if self.user.confirmed_at != None:
+            raise exceptions.AuthenticationFailed(
+                'Account not confirmed',
+                'not_confirmed',
+            )
+
 
 class UserSerializer(serializers.ModelSerializer):
     

@@ -1,5 +1,6 @@
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import (DjangoModelPermissions)
+from django.db import models
 
 class WavePermissions(DjangoModelPermissions):
     def __init__(self):
@@ -22,3 +23,9 @@ class StandardResultsSetPagination(PageNumberPagination):
         page_number = self.page.previous_page_number()
         return page_number
         
+class TimeStampedModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True

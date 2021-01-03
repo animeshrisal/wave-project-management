@@ -13,8 +13,9 @@ class Project(TimeStampedModel):
 class User(AbstractUser):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
     projects = models.ManyToManyField(Project)
-    confirmation_token = models.CharField(max_length=500)
-    confirmed_at = models.DateTimeField()
+    invitation_token = models.CharField(max_length=500, null=True)
+    invitation_sent_at = models.DateTimeField(null=True)
+    invited_at = models.DateTimeField(null=True) 
 
     def __str__(self):
         return str(self.id)
