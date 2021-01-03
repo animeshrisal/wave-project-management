@@ -3,6 +3,7 @@ from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import Group, Permission
 from django.core.serializers.json import Serializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import exceptions
 
 from .models import Organization, Project, Task, User
 
@@ -12,7 +13,8 @@ class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
 
-        self.check_confirmation()
+        #Check if the user is invited
+        self.check_invitation()
 
         refresh = self.get_token(self.user)
         data['refresh'] = str(refresh)
@@ -26,13 +28,12 @@ class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         return data
 
-    def check_confirmation():
-        if self.user.confirmed_at != None:
+    def check_invitation(self):
+        if self.user.invited_at == None:
             raise exceptions.AuthenticationFailed(
                 'Account not confirmed',
                 'not_confirmed',
             )
-
 
 class UserSerializer(serializers.ModelSerializer):
     
