@@ -8,6 +8,8 @@ from rest_framework import exceptions
 from .models import Organization, Project, Task, User
 
 from .helpers import StandardResultsSetPagination
+from django.db import transaction
+
 
 class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -46,9 +48,9 @@ class UserSerializer(serializers.ModelSerializer):
             )
 
     def create(self, validated_data):
-        user = User.objects.create_user(validated_data['username'], validated_data['email'], self.context['password'])
-
-        return user
+        with transaction.atomic():
+            user = User.objects.create_user(validated_data['username'], validated_data['email'], self.context['password'])
+            return user
 
     class Meta:
         model = User
