@@ -17,13 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 
 from rest_framework_simplejwt.views import (
-    TokenRefreshView,
+    TokenRefreshView
 )
 from rest_framework import routers, serializers, viewsets
 
-from backend.server import views
-
-from . import views
+from server.backend import views
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
@@ -33,7 +31,7 @@ router.register(r'organizations', views.OrganizationViewSet)
 router.register(r'tasks', views.TaskViewSet)
 
 urlpatterns = [
-    path('token/', views.AdaTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/', views.WaveTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('', include(router.urls)),
 ]

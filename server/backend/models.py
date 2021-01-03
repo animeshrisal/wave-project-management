@@ -9,6 +9,13 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
+class User(AbstractUser):
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
+    projects = models.ManyToManyField(Project)
+
+    def __str__(self):
+        return str(self.id)
+
 class Task(models.Model):
 
     task_status = (
@@ -23,9 +30,4 @@ class Task(models.Model):
     task_status = models.CharField(max_length=1, choices=task_status, default=TaskStatus.TODO)
     assigned_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-class User(AbstractUser):
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
-    projects = models.ManyToManyField(Project)
 
-    def __str__(self):
-        return str(self.id)
