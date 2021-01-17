@@ -6,10 +6,10 @@ from rest_framework.permissions import DjangoModelPermissions
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, WaveTokenObtainPairSerializer
-from .serializers import TaskSerializer, OrganizationSerializer, ProjectSerializer
+from .serializers import TaskSerializer, ProjectSerializer
 from .helpers import StandardResultsSetPagination, WavePermissions
 from django.contrib.auth.models import Group, Permission
-from .models import Organization, Project, Task, User
+from .models import Project, Task, User
 from django.db import transaction
 
 class WaveTokenObtainPairView(TokenObtainPairView):
@@ -39,12 +39,6 @@ class PermissionListApi(generics.ListAPIView):
     permission_classes = [WavePermissions]
     queryset = Permission.objects.all()
     serializer_class = PermissionSerializer
-    pagination_class = StandardResultsSetPagination
-
-class OrganizationViewSet(viewsets.ModelViewSet):
-    permission_classes = [WavePermissions]
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
     pagination_class = StandardResultsSetPagination
 
 class ProjectViewSet(viewsets.ModelViewSet):

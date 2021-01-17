@@ -5,7 +5,7 @@ from django.core.serializers.json import Serializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import exceptions
 
-from .models import Organization, Project, Task, User
+from .models import Project, Task, User
 
 from .helpers import StandardResultsSetPagination
 
@@ -73,15 +73,10 @@ class PermissionSerializer(serializers.ModelSerializer):
         model = Permission
         fields = ('id', 'name', 'content_type_id', 'codename')
 
-class OrganizationSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Organization
-        fields = ('id', 'name')
-
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ('id', 'name', 'organization')
+        fields = ('id', 'name')
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:

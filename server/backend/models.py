@@ -6,12 +6,8 @@ import jwt
 from django.utils import timezone
 from server.settings import SECRET_KEY
 
-class Organization(TimeStampedModel):
-    name = models.CharField(max_length=100)
-
 class Project(TimeStampedModel):
     name = models.CharField(max_length=100)
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 class WaveUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
@@ -23,7 +19,6 @@ class WaveUserManager(UserManager):
 
 class User(AbstractUser):
     objects = WaveUserManager()
-    organization = models.ForeignKey(Organization, on_delete=models.CASCADE, null=True)
     projects = models.ManyToManyField(Project)
     invitation_token = models.CharField(max_length=500, null=True)
     invitation_sent_at = models.DateTimeField(null=True)
