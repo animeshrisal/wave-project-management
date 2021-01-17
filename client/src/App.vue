@@ -13,6 +13,7 @@
 <script>
 
 import { mapState } from 'vuex'
+import Vue from 'vue'
 
 export default {
   name: "App",
@@ -20,6 +21,12 @@ export default {
     ...mapState({
       account: state => state.users,
     })
+  },
+  created: {
+    connectWebSocket: () => {
+      if(this.account.access)
+      Vue.prototype.$connect(`ws://localhost:8000?token=${this.account.access}`, { format: 'json' })
+    }
   },
   data: () => ({
     //

@@ -1,6 +1,6 @@
 import { userService } from '../services';
 import router from '../router';
-// import Vue from 'vue';
+import Vue from 'vue';
 
 const user = localStorage.getItem('user');
 const state = user ? { status: { isLoading: false }, user } : { status: { isLoading: false }, user: null, errors: {} };
@@ -12,7 +12,7 @@ const actions = {
             .then(
                 user => {
                     commit('loginSuccess', user);
-                    // Vue.prototype.$connect(`ws://localhost:8000?token=${user.token}`, { format: 'json' })
+                    Vue.prototype.$connect(`ws://localhost:8000?token=${user.access}`, { format: 'json' })
                     if (user.is_admin === true) {
                         router.push('/admin-dashboard')
                     } else {

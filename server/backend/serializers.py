@@ -29,7 +29,7 @@ class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
     def check_invitation(self):
-        if self.user.invited_at == None:
+        if self.user.invitation_sent_at == None and not self.user.is_superuser:
             raise exceptions.AuthenticationFailed(
                 'Account not confirmed',
                 'not_confirmed',
