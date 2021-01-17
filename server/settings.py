@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'channels',
     'server.backend'
 ]
 
@@ -72,6 +73,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'server.asgi.application'
 WSGI_APPLICATION = 'server.wsgi.application'
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -138,4 +140,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
+}
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis-server-name", 6379)],
+        },
+    },
 }

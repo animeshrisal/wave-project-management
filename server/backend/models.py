@@ -41,7 +41,7 @@ class User(AbstractUser):
 
     @classmethod
     def accept_invitation(token):
-        decoded_message = jwt.decode(token, SECRET_KEY, algorithm="HS256")
+        decoded_message = jwt.decode(token, SECRET_KEY, algorithms="HS256")
         user = User.objects.get(pk=decoded_message['user_id'])
         user.confirm_invitation()
 
