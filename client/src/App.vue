@@ -28,8 +28,6 @@ export default {
         `ws://localhost:8000?token=${user.access}`,
         { format: "json" }
       );
-    } else {
-      console.log("aaa")
     }
   },
   data: () => ({
