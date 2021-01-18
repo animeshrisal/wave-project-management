@@ -1,10 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, UserManager
-from .enums import *
 from .helpers import TimeStampedModel
 import jwt
 from django.utils import timezone
 from server.settings import SECRET_KEY
+from django.utils.translation import gettext_lazy as _
 
 class Project(TimeStampedModel):
     name = models.CharField(max_length=100)
@@ -49,16 +49,26 @@ class User(AbstractUser):
         return str(self.id) + " - " + str(self.username) 
 
 class Task(TimeStampedModel):
-    task_status = (
-        (TaskStatus.TODO, 'Todo'),
-        (TaskStatus.IN_PROGRESS, 'In Progress'),
-        (TaskStatus.REVIEW, 'Review'),
-        (TaskStatus.DONE, 'Done'),
-    )
+
+    class TaskStatus(models.IntegerChoices):
+        TODO = 1, _('Todo')
+        IN_PROGRESS = 2, _('In Progress')
+        REVIEW = 3, _('Review')
+        DONE = 4, _('Done')
+
+    class TaskPriority(models.IntegerChoices):
+        LOW = 1, _('Low')
+        MEDIUM = 2, _('Medium')
+        HIGH = 3, _('High')
+        HIGHEST = 4, _('Highest')
+
 
     name = models.CharField(max_length=100)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    task_status = models.CharField(max_length=1, choices=task_status, default=TaskStatus.TODO)
+    task_status = models.IntegerField(choices=TaskStatus.choices, default=TaskStatus.TODO)
+    task_priority = models.IntegerField(choices=TaskPriority.choices, default=TaskPriority.MEDIUM)
     assigned_user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
+class Notification(TimeStampedModel):
+    title = models.CharField(max_length=100)
+    description = models.CharField(max_length=200)
