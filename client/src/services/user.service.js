@@ -18,7 +18,7 @@ function login(username, password) {
     return fetch(`http://127.0.0.1:8000/token/`, requestOptions)
         .then(handleResponse)
         .then(user => {
-            if (user.token) {
+            if (user.access) {
                 localStorage.setItem('user', JSON.stringify(user));
             }
             return user;

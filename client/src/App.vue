@@ -11,21 +11,25 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
-import Vue from 'vue'
+import { mapState } from "vuex";
+import Vue from "vue";
 
 export default {
   name: "App",
   computed: {
     ...mapState({
-      account: state => state.users,
-    })
+      account: (state) => state.users,
+    }),
   },
-  created: {
-    connectWebSocket: () => {
-      if(this.account.access)
-      Vue.prototype.$connect(`ws://localhost:8000?token=${this.account.access}`, { format: 'json' })
+  created: () => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+      Vue.prototype.$connect(
+        `ws://localhost:8000?token=${user.access}`,
+        { format: "json" }
+      );
+    } else {
+      console.log("aaa")
     }
   },
   data: () => ({
