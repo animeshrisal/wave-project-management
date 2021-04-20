@@ -33,6 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('token/', views.WaveTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('accept_invite/',views.accept_invite, name='accept_invite'),
     path('', include(router.urls)),
     
 ]

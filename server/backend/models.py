@@ -5,6 +5,7 @@ import jwt
 from django.utils import timezone
 from server.settings import SECRET_KEY
 from django.utils.translation import gettext_lazy as _
+from django.db import transaction
 
 class WaveUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
@@ -13,6 +14,7 @@ class WaveUserManager(UserManager):
             extra_fields.setdefault('is_superuser', False)
             user = self._create_user(username, email, password, **extra_fields)
             user.invite_user()
+            return user
 
 class User(AbstractUser):
     objects = WaveUserManager()
@@ -31,15 +33,26 @@ class User(AbstractUser):
     def send_invite(self):
         self.invite_user()
 
-    def confirm_invitation(self):
+    def confirm_invitation(self, password):
         self.invitation_accepted_at = timezone.now()
+        self.set_password(password)
         self.save()
 
     @classmethod
-    def accept_invitation(token):
-        decoded_message = jwt.decode(token, SECRET_KEY, algorithms="HS256")
-        user = User.objects.get(pk=decoded_message['user_id'])
-        user.confirm_invitation()
+    def accept_invitation(self, token, password):
+        try:
+            decoded_message = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+            user = User.objects.get(pk=decoded_message['user_id'])
+            
+            time_difference = timezone.now() - user.invitation_sent_at 
+            if time_difference.days == 0 and user.invitation_accepted_at is None:
+                user.confirm_invitation(password)
+                return 'User confirmed'
+            else:
+                return 'Token has expired'
+                
+        except Exception as e:
+            return e
 
     def __str__(self):
         return str(self.id) + " - " + str(self.username) 

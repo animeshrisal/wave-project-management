@@ -9,8 +9,17 @@ from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, 
 from .serializers import TaskSerializer, ProjectSerializer
 from .helpers import StandardResultsSetPagination, WavePermissions
 from django.contrib.auth.models import Group, Permission
-from .models import Project, Task, User
+from .models import Project, Task, User, User
 from django.db import transaction
+
+from rest_framework import mixins
+
+from django.shortcuts import redirect
+
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.decorators import api_view, renderer_classes,  permission_classes
+
+from rest_framework import permissions
 
 class WaveTokenObtainPairView(TokenObtainPairView):
     serializer_class = WaveTokenObtainPairSerializer
@@ -22,13 +31,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def create(self, request):
         password = User.objects.make_random_password()
-        serializer = UserSerializer(data=request.data, context={ 'password' : password })
+        serializer = UserSerializer(data=request.data, context={ 'password' : 'asd' })
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_BAD_REQUEST)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [WavePermissions]
     queryset = Group.objects.all()
@@ -51,3 +60,14 @@ class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [WavePermissions]
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+@csrf_exempt
+@api_view(('GET',))
+@permission_classes((permissions.AllowAny,))
+def accept_invite(request):
+    invite_token = request.GET['invitation_token']
+    password = request.POST['password'] 
+
+    User.accept_invitation(invite_token, password)
+
+    return Response({'asd': 'asd'}, status=status.HTTP_201_CREATED)
