@@ -6,9 +6,6 @@ from django.utils import timezone
 from server.settings import SECRET_KEY
 from django.utils.translation import gettext_lazy as _
 
-class Project(TimeStampedModel):
-    name = models.CharField(max_length=100)
-
 class WaveUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         with transaction.atomic():
@@ -19,7 +16,6 @@ class WaveUserManager(UserManager):
 
 class User(AbstractUser):
     objects = WaveUserManager()
-    projects = models.ManyToManyField(Project)
     invitation_token = models.CharField(max_length=500, null=True)
     invitation_sent_at = models.DateTimeField(null=True)
     invitation_accepted_at = models.DateTimeField(null=True) 
@@ -47,6 +43,12 @@ class User(AbstractUser):
 
     def __str__(self):
         return str(self.id) + " - " + str(self.username) 
+
+
+class Project(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    owned_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    members = models.ManyToManyField(User, related_name='Project_members')
 
 class Task(TimeStampedModel):
 
