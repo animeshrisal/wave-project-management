@@ -47,12 +47,12 @@ class User(AbstractUser):
             time_difference = timezone.now() - user.invitation_sent_at 
             if time_difference.days == 0 and user.invitation_accepted_at is None:
                 user.confirm_invitation(password)
-                return 'User confirmed'
+                return True, 'User confirmed'
             else:
-                return 'Token has expired'
+                return False, 'Token has expired'
                 
         except Exception as e:
-            return e
+            return False, 'Could not accept invitation'
 
     def __str__(self):
         return str(self.id) + " - " + str(self.username) 

@@ -68,6 +68,9 @@ def accept_invite(request):
     invite_token = request.GET['invitation_token']
     password = request.POST['password'] 
 
-    User.accept_invitation(invite_token, password)
+    success, message = User.accept_invitation(invite_token, password)
 
-    return Response({'asd': 'asd'}, status=status.HTTP_201_CREATED)
+    if success:
+        return Response({'message': message}, status=status.HTTP_201_CREATED)
+    else:
+        return Response({'message': message}, status=status.HTTP_400_BAD_REQUEST)
