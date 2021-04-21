@@ -73,6 +73,11 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     pagination_class = StandardResultsSetPagination
 
+    def list(self, request, pk):
+        queryset = self.queryset.filter(project_id=pk)
+        serializer = TaskSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request, pk):
         context = { 'project': pk }
         serializer = TaskSerializer(data=request.data, context=context)
