@@ -7,7 +7,7 @@ export const userService = {
     logout
 }
 
-function login(username, password) {
+function login({username, password}) {
     const formData = new FormData()
     formData.append('username', username);
     formData.append('password', password)

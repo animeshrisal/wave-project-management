@@ -2,18 +2,11 @@ import React, { useState } from "react";
 import { Formik, Field, Form } from "formik";
 import { userService } from "../network/authentication";
 
+import {useMutation} from 'react-query';
+
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
 
-  const loginUser = ({ username, password} ) => {
-    setIsLoading(true);
-
-    userService.login(username, password).then(() => {
-      console.log("Logged in");
-    });
-
-    setIsLoading(false);
-  };
+  const mutation = useMutation((user) => userService.login(user))
 
   return (
     <div>
@@ -24,7 +17,7 @@ const Login = () => {
           password: "",
         }}
         onSubmit={async (values) => {
-          loginUser(values)
+          mutation.mutate(values);
         }}
       >
         <Form>
