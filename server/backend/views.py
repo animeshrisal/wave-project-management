@@ -57,6 +57,11 @@ class ProjectViewSet(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     pagination_class = StandardResultsSetPagination
 
+    def list(self, request, pk):
+        queryset = self.queryset.filter(project_id=pk)
+        serializer = ProjectSerializer(queryset, many=True)
+        return Response(serializer.data)
+
     def create(self, request):
         context = {'owned_by': request.user}
         serializer = ProjectSerializer(data=request.data, context=context)
