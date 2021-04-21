@@ -11,6 +11,7 @@ function login({username, password}) {
     const formData = new FormData()
     formData.append('username', username);
     formData.append('password', password)
+    
     const requestOptions = {
         method: 'POST',
         body: formData

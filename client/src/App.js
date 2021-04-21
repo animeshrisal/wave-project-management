@@ -12,24 +12,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Login</Link>
-              </li>
-            </ul>
-          </nav>
-
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/">
-              <Login />
-            </Route>
-            <Route path="/projects">
-              <Project />
-            </Route>
-          </Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <Route path="/projects">
+            <Project />
+          </Route>
         </div>
       </Router>
     </QueryClientProvider>

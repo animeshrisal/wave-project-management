@@ -1,17 +1,14 @@
-import { handleResponse, requestOptions, URL } from "../helpers";
+import {
+  handleResponse,
+  authenticatedGetRequestOption,
+  authenticatedPostRequestGenerator,
+  URL,
+} from "../helpers";
 
-export const projectService = {
-  getProjectList,
-  createProject,
-  getProjectDetail,
-  updateProject,
-  deleteProject,
-};
-
-const getProjectList = () => {
-  return fetch(`${URL}/projects/`, requestOptions)
+export const getProjectList = () => {
+  return fetch(`${URL}/projects/`, authenticatedGetRequestOption)
     .then(handleResponse)
-    .tehen((projects) => {
+    .then((projects) => {
       return projects;
     });
 };
@@ -23,3 +20,13 @@ const getProjectDetail = () => {};
 const updateProject = () => {};
 
 const deleteProject = () => {};
+
+const projectService = {
+  getProjectList,
+  createProject,
+  getProjectDetail,
+  updateProject,
+  deleteProject,
+};
+
+export default projectService;
