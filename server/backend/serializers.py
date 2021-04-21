@@ -54,6 +54,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'email')
 
+class InvitationSerializer(serializers.Serializer):
+    password = serializers.CharField(allow_null=False, allow_blank=False)
+    invitation_token = serializers.CharField(allow_blank=False, allow_null=False)
+
 class GroupSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         required=True,
