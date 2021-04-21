@@ -84,7 +84,7 @@ class Task(TimeStampedModel):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     task_status = models.IntegerField(choices=TaskStatus.choices, default=TaskStatus.TODO)
     task_priority = models.IntegerField(choices=TaskPriority.choices, default=TaskPriority.MEDIUM)
-    assigned_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    assigned_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
 class Notification(TimeStampedModel):
     title = models.CharField(max_length=100)

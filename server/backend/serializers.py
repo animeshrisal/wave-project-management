@@ -5,6 +5,8 @@ from django.core.serializers.json import Serializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework import exceptions
 
+from django.db import transaction
+
 from .models import Project, Task, User
 
 from .helpers import StandardResultsSetPagination
@@ -78,11 +80,29 @@ class PermissionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'content_type_id', 'codename')
 
 class ProjectSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(
+        required=True,
+        validators=[UniqueValidator(queryset=Project.objects.all())]
+    )
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            project = Project.objects.create(name=validated_data['name'],owned_by=self.context['owned_by'])
+            project.members.add(self.context['owned_by'])
+            return project
+
     class Meta:
         model = Project
         fields = ('id', 'name')
 
 class TaskSerializer(serializers.ModelSerializer):
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            task = Task.objects.create(name=validated_data['name'], project_id=self.context['project'])
+            return task
+
     class Meta:
         model = Task
-        fields = ('id', 'name', 'project', 'task_status')
+        fields = ('id', 'name', 'task_status')
+

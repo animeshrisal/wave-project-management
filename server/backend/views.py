@@ -1,18 +1,18 @@
+from django.contrib.auth.models import Group, Permission
+
+from .helpers import StandardResultsSetPagination, WavePermissions
+
+from .models import Project, Task, User, User
+
 from rest_framework import routers, serializers, viewsets, generics
 from rest_framework.response import Response
 from rest_framework import status, generics
 from rest_framework.permissions import DjangoModelPermissions, AllowAny
-
+from rest_framework import mixins
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, WaveTokenObtainPairSerializer
 from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer
-from .helpers import StandardResultsSetPagination, WavePermissions
-from django.contrib.auth.models import Group, Permission
-from .models import Project, Task, User, User
-from django.db import transaction
-
-from rest_framework import mixins
 
 from django.shortcuts import redirect
 
@@ -20,7 +20,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.decorators import api_view, renderer_classes,  permission_classes
 
 from rest_framework import permissions
-from django.db import transaction
+
 
 class WaveTokenObtainPairView(TokenObtainPairView):
     serializer_class = WaveTokenObtainPairSerializer
@@ -53,15 +53,34 @@ class PermissionListApi(generics.ListAPIView):
 
 class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [WavePermissions]
-    queryset = Permission.objects.all()
+    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     pagination_class = StandardResultsSetPagination
+
+    def create(self, request):
+        context = {'owned_by': request.user}
+        serializer = ProjectSerializer(data=request.data, context=context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [WavePermissions]
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+    pagination_class = StandardResultsSetPagination
 
+    def create(self, request, pk):
+        context = { 'project': pk }
+        serializer = TaskSerializer(data=request.data, context=context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class InvitationView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -76,6 +95,6 @@ class InvitationView(generics.CreateAPIView):
             if success:
                 return Response({'message': message}, status=status.HTTP_201_CREATED)
             else:
-                return Response({'message': message}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': message}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
