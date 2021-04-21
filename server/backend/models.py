@@ -7,6 +7,8 @@ from server.settings import SECRET_KEY
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
 
+from .constants import MESSAGE
+
 class WaveUserManager(UserManager):
     def create_user(self, username, email=None, password=None, **extra_fields):
         with transaction.atomic():
@@ -47,12 +49,12 @@ class User(AbstractUser):
             time_difference = timezone.now() - user.invitation_sent_at 
             if time_difference.days == 0 and user.invitation_accepted_at is None:
                 user.confirm_invitation(password)
-                return True, 'User confirmed'
+                return True, MESSAGE['USER_CONFIRMED']
             else:
-                return False, 'Token has expired'
+                return False, MESSAGE['TOKEN_HAS_EXPIRED']
                 
         except Exception as e:
-            return False, 'Could not accept invitation'
+            return False, MESSAGE['COULD_NOT_ACCEPT_INVITATION']
 
     def __str__(self):
         return str(self.id) + " - " + str(self.username) 
