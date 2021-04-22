@@ -1,12 +1,12 @@
 import {
   handleResponse,
   authenticatedGetRequestOption,
-  authenticatedPostRequestGenerator,
   URL,
 } from "../helpers";
 
 export const getProjectList = () => {
-  return fetch(`${URL}/projects/`, authenticatedGetRequestOption)
+
+  return fetch(`${URL}/projects/`, authenticatedGetRequestOption())
     .then(handleResponse)
     .then((projects) => {
       return projects;

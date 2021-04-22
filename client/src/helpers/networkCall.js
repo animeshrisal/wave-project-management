@@ -27,9 +27,11 @@ export function authenticatedPostRequestGenerator(values= {}) {
     return {...requestOption, body: formData}
 }
 
-export const authenticatedGetRequestOption = {
-    method: 'GET',
-    headers: authHeader()
+export function authenticatedGetRequestOption() {
+    return {
+        method: 'GET',
+        headers: authHeader()
+    }
 }
 
 

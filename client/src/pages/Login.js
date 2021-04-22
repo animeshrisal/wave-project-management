@@ -1,17 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Field, Form } from "formik";
 import { userService } from "../network/authentication";
 
-import { useMutation } from "react-query";
-
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Login = () => {
-  const mutation = useMutation((user) => userService.login(user));
+  const history = useHistory();
 
-  if (mutation.isSuccess) {
-    return <Redirect to="/projects" />;
-  }
+  const test = (username, password) => {
+    userService.login(username, password).then(() => {
+      history.push('/projects')
+    });
+  } 
 
   return (
     <div>
@@ -21,8 +21,8 @@ const Login = () => {
           username: "",
           password: "",
         }}
-        onSubmit={async (values) => {
-          mutation.mutate(values);
+        onSubmit={(values) => {
+          test(values)
         }}
       >
         <Form>
