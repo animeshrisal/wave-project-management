@@ -7,7 +7,7 @@ from .models import Project, Task, User, User
 from rest_framework import routers, serializers, viewsets, generics
 from rest_framework.response import Response
 from rest_framework import status, generics
-from rest_framework.permissions import DjangoModelPermissions, AllowAny
+from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAuthenticated
 from rest_framework import mixins
 from rest_framework_simplejwt.views import TokenObtainPairView
 
@@ -107,3 +107,11 @@ class InvitationView(generics.CreateAPIView):
                 return Response({'error': message}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class MyProfileView(generics.RetrieveAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = UserSerializer
+
+    def retrieve(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
