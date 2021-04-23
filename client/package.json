@@ -2,11 +2,16 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
+  "main": "src/main.js",
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@fortawesome/free-solid-svg-icons": "^5.15.3",
+    "@fortawesome/react-fontawesome": "^0.1.14",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
     "formik": "^2.2.6",
+    "node-sass": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-query": "^3.13.10",
@@ -20,7 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "electron": "electron ."
   },
   "eslintConfig": {
     "extends": [
@@ -41,6 +47,7 @@
     ]
   },
   "devDependencies": {
-    "@types/sortablejs": "^1.10.6"
+    "@types/sortablejs": "^1.10.6",
+    "electron": "^12.0.5"
   }
 }
