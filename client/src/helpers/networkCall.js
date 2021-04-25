@@ -18,7 +18,7 @@ export function authenticatedPostRequestGenerator(values= {}) {
         headers: authHeader(),
     }
 
-    if  (Object.keys(values).length != 0){
+    if  (Object.keys(values).length !== 0){
         for ( var key in values ) {
             formData.append(camelToSnakeCase(key), formData[key]);
         }
