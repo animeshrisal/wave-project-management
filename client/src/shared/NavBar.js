@@ -1,16 +1,18 @@
 import React from "react";
-import { NavLink } from 'react-router-dom';
+import { NavLink, Redirect } from 'react-router-dom';
 import "./NavBar.scss";
 
 const NavBar = () => {
 
-    const removeToken = () => {
+    const logoutUser = () => {
         localStorage.removeItem('user')
     } 
+
     return (
         <ul className="nav-list">
-            <li className="nav-item"><a href="#">Home</a></li>
-            <li className="nav-item"><a href="#">Account</a></li>
+            <NavLink activeClassName="selected-nav-item" className="nav-item" to="/projects">Project</NavLink>
+            <NavLink activeClassName="selected-nav-item" className="nav-item"to="/profile">Account</NavLink>
+            <NavLink activeClassName="selected-nav-item" className="nav-item"to="/" onClick={logoutUser()}>Logout</NavLink>
         </ul>
     )   
 }
