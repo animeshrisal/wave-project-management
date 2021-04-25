@@ -7,7 +7,7 @@ from rest_framework import exceptions
 
 from django.db import transaction
 
-from .models import Project, Task, User
+from .models import Project, Task, User, Notification
 
 from .helpers import StandardResultsSetPagination
 
@@ -106,3 +106,7 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = ('id', 'name', 'task_status', 'task_priority')
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('id', 'title', 'description', 'created_at')

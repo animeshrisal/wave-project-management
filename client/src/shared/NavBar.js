@@ -18,9 +18,10 @@ const NavBar = (props) => {
 
     return (
          <ul className="nav-list">
-            <NavLink activeClassName="selected-nav-item" className="nav-item" to="/projects">Project</NavLink>
+            <NavLink activeClassName="selected-nav-item" className="nav-item" to="/projects">Projects</NavLink>
             <NavLink activeClassName="selected-nav-item" className="nav-item"to="/profile">Account</NavLink>
-            { state.isAuthenticated && <NavLink activeClassName="selected-nav-item" className="nav-item"to="/" onClick={logoutUser}>Logout</NavLink> }
+            <NavLink activeClassName="selected-nav-item" className="nav-item"to="/notification">Notifications</NavLink>
+            <NavLink activeClassName="selected-nav-item" className="nav-item"to="/login"  onClick={logoutUser}>Logout</NavLink>
         </ul>
     )   
 }

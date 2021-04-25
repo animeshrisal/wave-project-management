@@ -10,6 +10,7 @@ import Profile from "./pages/Profile";
 import 'antd/dist/antd.css';
 import Task from "./pages/Task";
 import { AuthenticationProvider } from "./context/AuthContext";
+import Notification from "./pages/Notification";
 
 const queryClient = new QueryClient();
 
@@ -22,9 +23,10 @@ function App() {
       <Router>
           <NavBar />
           <div>
-            <Route exact path="/" component={Login} />
+            <Route exact path="/login" component={Login} />
             <PrivateRoute exact path="/projects" component={Project} /> 
             <PrivateRoute exact path="/profile" component={Profile} />
+            <PrivateRoute exact path="/notification" component={Notification} />
             <PrivateRoute exact path="/profile/:projectId" component={Task} />
           </div>
 

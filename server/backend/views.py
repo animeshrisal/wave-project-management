@@ -12,7 +12,7 @@ from rest_framework import mixins
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, WaveTokenObtainPairSerializer
-from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer
+from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer, NotificationSerializer
 
 from django.shortcuts import redirect
 
@@ -115,3 +115,12 @@ class MyProfileView(generics.RetrieveAPIView):
     def retrieve(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+
+class NotificationView(generics.RetrieveUpdateAPIView):
+    permissions_classes = (IsAuthenticated,)
+    serializer_class = NotificationSerializer
+
+    def retrieve(self, request):
+        queryset = Notification.objects.all()
+        serializer = NotificationSerializer

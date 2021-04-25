@@ -86,6 +86,7 @@ class Task(TimeStampedModel):
     task_priority = models.IntegerField(choices=TaskPriority.choices, default=TaskPriority.MEDIUM)
     assigned_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
 
-class Notification(TimeStampedModel):
+class Notification(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
