@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 
 import { useQuery } from "react-query";
+import ProjectCard from "../components/ProjectCard";
 import projectService from "../network/projectService";
 
-import { Card } from 'antd';
+import "./Project.scss"
 
 export default function Project() {
   const { isLoading, data, error } = useQuery(
@@ -16,7 +17,10 @@ export default function Project() {
   if (error) return "Error...";
 
   return (
-    <ul>
-    </ul>
+    <div className="grid-container">
+      {
+        data.map(project => <ProjectCard className="grid-item" project={project} />)
+      }
+    </div>
   );
 }

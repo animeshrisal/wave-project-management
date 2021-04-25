@@ -55,7 +55,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
     permission_classes = [WavePermissions]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    pagination_class = StandardResultsSetPagination
 
     def list(self, request):
         serializer = ProjectSerializer(self.queryset, many=True)
