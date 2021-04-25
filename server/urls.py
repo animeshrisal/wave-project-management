@@ -33,7 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('token/', views.WaveTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('my_profile', views.MyProfileView.as_view(), name='my_profile'),
+    path('my_profile/', views.MyProfileView.as_view(), name='my_profile'),
     path('projects/<int:pk>/tasks/', views.TaskViewSet.as_view({'get': 'list', 'post': 'create'}), name='project-task'),
     path('projects/<int:id>/tasks/<int:task_id>/', views.TaskViewSet.as_view({'put': 'update', 'delete': 'destroy'}), name='project-task-details'),
     path('accept_invite/',views.InvitationView.as_view(), name='accept_invite'),

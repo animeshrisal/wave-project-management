@@ -1,6 +1,6 @@
 import { handleResponse, URL }  from '../helpers';
 
-export const userService = {
+export const authenticationService = {
     login,
     refreshToken,
     forgotPassword,
@@ -26,7 +26,6 @@ function login({username, password}) {
             return user;
         })
 }
-
 
 function refreshToken() {
     const requestOptions = {

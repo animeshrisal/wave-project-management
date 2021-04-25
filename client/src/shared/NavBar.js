@@ -1,5 +1,6 @@
 import React from "react";
 import { NavLink } from 'react-router-dom';
+import "./NavBar.scss";
 
 const NavBar = () => {
 
@@ -7,11 +8,10 @@ const NavBar = () => {
         localStorage.removeItem('user')
     } 
     return (
-    <React.Fragment>
-        <NavLink to="/projects">Project</NavLink>
-        <NavLink to="/profile">Profile</NavLink>
-        <NavLink to="/" onClick={removeToken}>Logout</NavLink>
-    </React.Fragment>
+        <ul className="nav-list">
+            <li className="nav-item"><a href="#">Home</a></li>
+            <li className="nav-item"><a href="#">Account</a></li>
+        </ul>
     )   
 }
 

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Formik, Field, Form } from "formik";
-import { userService } from "../network/authentication";
+import { authenticationService } from "../network/authentication";
 
 import { useMutation } from "react-query";
 
 import { Redirect } from "react-router-dom";
 
 const Login = () => {
-  const mutation = useMutation((user) => userService.login(user));
+  const mutation = useMutation((user) => authenticationService.login(user));
 
   if (mutation.isSuccess) {
     return <Redirect to="/projects" />;
