@@ -3,8 +3,8 @@ import React from "react";
 const AuthContext = React.createContext();
 
 const initialState = {
-    isAuthenticated: false,
-    user: null
+    isAuthenticated: localStorage.getItem("user") ? true : false,
+    user:  localStorage.getItem("user") || null
 }
 
 const reducer = (state, action) => {

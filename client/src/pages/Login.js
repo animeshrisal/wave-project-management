@@ -11,14 +11,13 @@ const Login = (props) => {
 
   const { dispatch } = useAuthentication()
     
-  const mutation = useMutation((user) => authenticationService.login(user).then(
-    dispatch({
-      type: 'LOGIN',
-      payload: user
-    })
-  ));
+  const mutation = useMutation((user) => authenticationService.login(user));
 
   if (mutation.isSuccess) {
+    dispatch({
+      type: 'LOGIN',
+      payload: mutation.data
+    })
     return <Redirect to="/projects" />;
   }
 
