@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Formik, Field, Form } from "formik";
 import { authenticationService } from "../network/authentication";
 
 import { useMutation } from "react-query";
 
 import { Redirect } from "react-router-dom";
+import { useAuthentication } from "../context/AuthContext";
 
-const Login = () => {
-  const mutation = useMutation((user) => authenticationService.login(user));
+const Login = (props) => {
+
+  const { dispatch } = useAuthentication()
+    
+  const mutation = useMutation((user) => authenticationService.login(user).then(
+    dispatch({
+      type: 'LOGIN',
+      payload: user
+    })
+  ));
 
   if (mutation.isSuccess) {
     return <Redirect to="/projects" />;
