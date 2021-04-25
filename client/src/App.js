@@ -22,7 +22,7 @@ function App() {
       <Router>
           <NavBar />
           <div>
-            <Route exact path="/" component={() => <Login />} />
+            <Route exact path="/" component={Login} />
             <PrivateRoute exact path="/projects" component={Project} /> 
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/profile/:projectId" component={Task} />
