@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { useParams } from "react-router";
+import TaskTable from "../components/TaskTable";
 import taskService from "../network/taskService";
 
 
@@ -18,16 +19,6 @@ export default function Task(props) {
 
 
   return (
-    <div className="grid-container">
-      {
-        data.map(task =>
-            <div> 
-                <span>{task.name}</span>
-                <span> {task.taskStatus}</span>
-                <span>{task.taskPriority}</span>
-            </div>
-          )
-      }
-    </div>
+    <TaskTable data={data} />
   );
 }
