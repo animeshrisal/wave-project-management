@@ -11,6 +11,7 @@ import 'antd/dist/antd.css';
 import Task from "./pages/Task";
 import { AuthenticationProvider } from "./context/AuthContext";
 import Notification from "./pages/Notification";
+import Board from "./pages/Board";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ function App() {
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/notification" component={Notification} />
             <PrivateRoute exact path="/projects/:projectId" component={Task} />
+            <PrivateRoute exact path="/projects/:projectId/task/1/board" component={Board} />
           </div>
 
       </Router>

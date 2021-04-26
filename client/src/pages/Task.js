@@ -17,8 +17,14 @@ export default function Task(props) {
 
   if (error) return "Error...";
 
+    const goToBoard = (taskId) => {
+        props.history.push(`/projects/${projectId}/task/${taskId}/board`)
+    }
 
   return (
-    <TaskTable data={data} />
+    <div>
+        <div onClick={() => goToBoard(1)}>Go to Board</div>
+        <TaskTable goToBoard={goToBoard} data={data} />
+    </div>
   );
 }
