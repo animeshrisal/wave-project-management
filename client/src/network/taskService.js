@@ -1,17 +1,13 @@
-import { handleResponse, requestOptions, URL } from "../helpers";
+import {
+    handleResponse,
+    authenticatedGetRequestOption,
+    URL,
+  } from "../helpers";
 
-export const projectService = {
-    getTaskList,
-    createTask,
-    getTaskDetail,
-    updateTask,
-    deleteTask
-}
-
-const getTaskList = () => {
-    return fetch(`${URL}/tasks/`, requestOptions)
+const getTaskList = (projectId) => {
+    return fetch(`${URL}/projects/${projectId}/tasks/`, authenticatedGetRequestOption())
         .then(handleResponse)
-        .tehen(tasks => {
+        .then(tasks => {
             return tasks;
         })
 }
@@ -31,3 +27,13 @@ const updateTask = () => {
 const deleteTask = () => {
 
 }
+
+const taskService = {
+    getTaskList,
+    createTask,
+    getTaskDetail,
+    updateTask,
+    deleteTask
+}
+
+export default taskService;

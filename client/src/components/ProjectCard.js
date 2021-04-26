@@ -1,10 +1,16 @@
 import React from "react";
+import { Redirect } from "react-router";
 import "./ProjectCard.scss"
 
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, goToProjectDetails }) => {
+
+    const goToProject = () => {
+        goToProjectDetails(project.id)
+    }
+
     return (
-        <div className="card">
+        <div onClick={goToProject} className="card">
             { project.name }
         </div>
     )

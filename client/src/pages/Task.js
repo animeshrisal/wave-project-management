@@ -1,23 +1,33 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "react-query";
-import { userService } from "../network/userService";
+import { useParams } from "react-router";
+import taskService from "../network/taskService";
 
 
+export default function Task(props) {
 
-const Task = () => {
-    
-    const { isLoading, data, error } = useQuery(
-        "user",
-        userService.getMyProfile
-      );
-    
-      if (isLoading) return 'Loading...'
+    const { projectId } = useParams()
+  const { isLoading, data, error } = useQuery(
+    ["tasks", projectId],
+    () => taskService.getTaskList(projectId)
+  );
 
-      if (error) return 'Error...'
+  if (isLoading) return "Loading...";
 
-    return (
-        <div>ASD</div>
-    )
+  if (error) return "Error...";
+
+
+  return (
+    <div className="grid-container">
+      {
+        data.map(task =>
+            <div> 
+                <span>{task.name}</span>
+                <span> {task.taskStatus}</span>
+                <span>{task.taskPriority}</span>
+            </div>
+          )
+      }
+    </div>
+  );
 }
-
-export default Task

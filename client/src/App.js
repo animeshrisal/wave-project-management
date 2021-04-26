@@ -27,7 +27,7 @@ function App() {
             <PrivateRoute exact path="/projects" component={Project} /> 
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/notification" component={Notification} />
-            <PrivateRoute exact path="/profile/:projectId" component={Task} />
+            <PrivateRoute exact path="/projects/:projectId" component={Task} />
           </div>
 
       </Router>
