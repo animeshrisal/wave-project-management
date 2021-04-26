@@ -7,7 +7,7 @@ from rest_framework import exceptions
 
 from django.db import transaction
 
-from .models import Project, Task, User, Notification
+from .models import Project, Task, User, Notification, Sprint
 
 from .helpers import StandardResultsSetPagination
 
@@ -98,9 +98,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 class TaskSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):
-        with transaction.atomic():
-            task = Task.objects.create(name=validated_data['name'], project_id=self.context['project'])
-            return task
+        task = Task.objects.create(name=validated_data['name'], sprint_id=self.context['sprint'])
+        return task
 
     class Meta:
         model = Task
@@ -110,3 +109,20 @@ class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
         fields = ('id', 'title', 'description', 'created_at')
+
+class SprintSerializer(serializers.ModelSerializer):
+
+    name = serializers.CharField(
+        required=True,
+        validators=[UniqueValidator(queryset=Project.objects.all())]
+    )
+
+    tasks = TaskSerializer(many=True)
+
+    def create(self, validated_data):
+        sprint = Sprint.objects.create(name=validated_data['name'], project_id=self.context['project'])
+        return sprint
+
+    class Meta:
+        model = Sprint
+        fields = ('id', 'name', 'tasks')

@@ -2,7 +2,7 @@ from django.contrib.auth.models import Group, Permission
 
 from .helpers import StandardResultsSetPagination, WavePermissions
 
-from .models import Project, Task, User, User
+from .models import Project, Task, User, User, Sprint
 
 from rest_framework import routers, serializers, viewsets, generics
 from rest_framework.response import Response
@@ -12,7 +12,7 @@ from rest_framework import mixins
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, WaveTokenObtainPairSerializer
-from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer, NotificationSerializer
+from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer, NotificationSerializer, SprintSerializer
 
 from django.shortcuts import redirect
 
@@ -76,13 +76,13 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     pagination_class = StandardResultsSetPagination
 
-    def list(self, request, pk):
-        queryset = self.queryset.filter(project_id=pk)
+    def list(self, request, pk, sprint_id):
+        queryset = self.queryset.filter(sprint_id=sprint_id)
         serializer = TaskSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def create(self, request, pk):
-        context = { 'project': pk }
+    def create(self, request, pk, sprint_id):
+        context = { 'sprint': sprint_id }
         serializer = TaskSerializer(data=request.data, context=context)
         if serializer.is_valid():
             serializer.save()
@@ -123,3 +123,22 @@ class NotificationView(generics.RetrieveUpdateAPIView):
     def retrieve(self, request):
         queryset = Notification.objects.all()
         serializer = NotificationSerializer
+
+class SprintViewSet(viewsets.ModelViewSet):
+    permission_classes = (IsAuthenticated,)
+    serializers = SprintSerializer    
+    queryset = Sprint.objects.all()
+
+    def list(self, request, pk):
+        queryset = self.queryset.filter(project_id=pk)
+        serializer = SprintSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request, pk):
+        context = { 'project': pk }
+        serializer = SprintSerializer(data=request.data, context=context)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -59,11 +59,14 @@ class User(AbstractUser):
     def __str__(self):
         return str(self.id) + " - " + str(self.username) 
 
-
 class Project(TimeStampedModel):
     name = models.CharField(max_length=100)
     owned_by = models.ForeignKey(User, on_delete=models.CASCADE)
     members = models.ManyToManyField(User, related_name='Project_members')
+
+class Sprint(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
 class Task(TimeStampedModel):
 
@@ -79,9 +82,8 @@ class Task(TimeStampedModel):
         HIGH = 3, _('High')
         HIGHEST = 4, _('Highest')
 
-
     name = models.CharField(max_length=100)
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    sprint = models.ForeignKey(Sprint, on_delete=models.CASCADE, related_name='tasks')
     task_status = models.IntegerField(choices=TaskStatus.choices, default=TaskStatus.TODO)
     task_priority = models.IntegerField(choices=TaskPriority.choices, default=TaskPriority.MEDIUM)
     assigned_user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
@@ -90,3 +92,4 @@ class Notification(models.Model):
     title = models.CharField(max_length=100)
     description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+
