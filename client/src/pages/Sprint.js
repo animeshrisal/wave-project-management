@@ -17,14 +17,18 @@ export default function Task(props) {
 
   if (error) return "Error...";
 
-    const goToBoard = (taskId) => {
-        props.history.push(`/projects/${projectId}/task/${taskId}/board`)
+    const goToBoard = (sprintId) => {
+        props.history.push(`/projects/${projectId}/sprint/${sprintId}/board`)
     }
 
   return (
     <div>
-        <div onClick={() => goToBoard(1)}>Go to Board</div>
-        <TaskTable goToBoard={goToBoard} data={data} />
+      { data.map(sprint => (
+        <div>
+          <div onClick={() => goToBoard(sprint.id)}>Go to Board</div>
+          <TaskTable goToBoard={goToBoard} data={sprint.tasks} />
+        </div>
+      ))}
     </div>
   );
 }
