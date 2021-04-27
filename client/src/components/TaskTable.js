@@ -1,6 +1,5 @@
 import React from "react";
 import { useTable } from 'react-table';
-import Task from "../pages/Task";
 
 const TaskTable = (props) => {
       const data = React.useMemo(
