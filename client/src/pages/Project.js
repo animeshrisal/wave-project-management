@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { useQuery } from "react-query";
-import { Redirect } from "react-router";
 import ProjectCard from "../components/ProjectCard";
 import projectService from "../network/projectService";
 

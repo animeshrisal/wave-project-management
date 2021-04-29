@@ -1,6 +1,6 @@
 import React  from "react";
-import { useQuery } from "react-query";
-import { userService } from "../network/userService";
+// import { useQuery } from "react-query";
+// import { userService } from "../network/userService";
 
 
 

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { useParams } from "react-router";
-import { ReactSortable, Sortable } from "react-sortablejs";
+import { ReactSortable} from "react-sortablejs";
 
 import sprintService from "../network/sprintService";
 

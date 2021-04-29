@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { NavLink, Redirect } from 'react-router-dom';
+import React from "react";
+import { NavLink } from 'react-router-dom';
 import { useAuthentication } from "../context/AuthContext";
 import "./NavBar.scss";
 

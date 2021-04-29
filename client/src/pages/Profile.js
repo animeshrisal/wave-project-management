@@ -6,7 +6,7 @@ import { userService } from "../network/userService";
 
 const Profile = () => {
     
-    const { isLoading, data, error } = useQuery(
+    const { isLoading, error } = useQuery(
         "user",
         userService.getMyProfile
       );
