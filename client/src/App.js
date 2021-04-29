@@ -29,7 +29,7 @@ function App() {
             <PrivateRoute exact path="/profile" component={Profile} />
             <PrivateRoute exact path="/notification" component={Notification} />
             <PrivateRoute exact path="/projects/:projectId" component={Sprint} />
-            <PrivateRoute exact path="/projects/:projectId/sprint/:sprintId/" component={Board} />
+            <PrivateRoute exact path="/projects/:projectId/sprint/:sprintId/board" component={Board} />
           </div>
 
       </Router>
