@@ -2,6 +2,7 @@ import {
     handleResponse,
     authenticatedGetRequestOption,
     URL,
+    authenticatedRequestGenerator,
   } from "../helpers";
 
 const getSprintList = (projectId) => {
@@ -13,11 +14,18 @@ const getSprintList = (projectId) => {
 }
 
 const getBoardData = (projectId, sprintId) => {
-    return fetch(`${URL}/projects/${projectId}/sprints/${sprintId}/board`, authenticatedGetRequestOption())
+    return fetch(`${URL}/projects/${projectId}/sprints/${sprintId}/board/`, authenticatedGetRequestOption())
         .then(handleResponse)
         .then(tasks => {
             return tasks;
         })
+}
+
+const updateTaskStatus = (projectId, sprintId, values) => {
+    const { taskId, taskStatus } = values
+    return fetch(
+        `${URL}/projects/${projectId}/sprints/${sprintId}/tasks/${taskId}/`, 
+        authenticatedRequestGenerator({ taskStatus }, 'PATCH'))
 }
 
 
@@ -37,13 +45,15 @@ const deleteSprint = () => {
 
 }
 
+
 const sprintService = {
     getSprintList,
     createSprint,
     getSprintDetail,
     updateSprint,
     deleteSprint,
-    getBoardData
+    getBoardData,
+    updateTaskStatus
 }
 
 export default sprintService;

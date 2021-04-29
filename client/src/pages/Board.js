@@ -1,36 +1,50 @@
 import React, { useState } from "react";
+import { useMutation, useQuery } from "react-query";
+import { useParams } from "react-router";
 import { ReactSortable, Sortable } from "react-sortablejs";
 
-const Board = (props) => {
+import sprintService from "../network/sprintService";
 
-    const changeStatus = (status) => {
-        console.log(status)
+const Board = () => {
+
+    const changeStatus = (e, status) => {
+        mutation.mutate({'taskId': e.item.dataset.id, 'taskStatus': status})
     }
 
-    const [state, setState] = useState([
-        { id: 1, name: "shrek" },
-        { id: 2, name: "fiona" },
-      ]);
+    const { projectId, sprintId } = useParams()
 
-      const [state1, setState1] = useState([
-        { id: 3, name: "shrek" },
-        { id: 4, name: "fiona" },
-      ]);
+    const mutation = useMutation((values) => sprintService.updateTaskStatus(projectId, sprintId, values));
 
-      const [state2, setState2] = useState([
-        { id: 5, name: "shrek" },
-        { id: 6, name: "fiona" },
-      ]);
+    const { isLoading, error } = useQuery(
+        ["board", projectId, sprintId],
+        () => sprintService.getBoardData(projectId, sprintId),
+        {
+            onSuccess: (data) => {
+                setState(data[1] || [])
+                setState1(data[2] || [])
+                setState2(data[3] || [])
+                setState3(data[4] || [])
+            }
+        }
+    );
 
-      const [state3, setState3] = useState([
-        { id: 7, name: "shrek" },
-        { id: 8, name: "fiona" },
-      ]);
+
+    const [state, setState] = useState([]);
+    const [state1, setState1] = useState([]);
+    const [state2, setState2] = useState([]);
+    const [state3, setState3] = useState([]);
+
+
+
+    if (isLoading) return "Loading...";
+
+    if (error) return "Error...";
 
     return (
         <React.Fragment>
             <ReactSortable 
-                onAdd = {() => changeStatus(1)}
+                style={{padding: '50px', background: 'red'}}
+                onAdd = {(e) => changeStatus(e, 1)}
                 group="board"
                 animation={200} 
                 list={state} 
@@ -40,7 +54,8 @@ const Board = (props) => {
                 ))}
             </ReactSortable>
             <ReactSortable 
-                onAdd = {() => changeStatus(2)}
+                style={{padding: '50px', background: 'blue'}}
+                onAdd = {(e) => changeStatus(e, 2)}
                 group="board"
                 animation={200} 
                 list={state1} 
@@ -50,7 +65,8 @@ const Board = (props) => {
                 ))}
             </ReactSortable>
             <ReactSortable 
-                onAdd = {() => changeStatus(3)}
+                style={{padding: '50px', background: 'yellow'}}
+                onAdd = {(e) => changeStatus(e, 3)}
                 group="board"
                 animation={200} 
                 list={state2} 
@@ -60,7 +76,8 @@ const Board = (props) => {
                 ))}
             </ReactSortable>
             <ReactSortable 
-                onAdd = {() => changeStatus(4)}
+                style={{padding: '50px', background: 'purple'}}
+                onAdd = {(e) => changeStatus(e, 4)}
                 group="board"
                 animation={200} 
                 list={state3} 

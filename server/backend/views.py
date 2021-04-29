@@ -6,7 +6,7 @@ from .models import Project, Task, User, User, Sprint
 
 from rest_framework import routers, serializers, viewsets, generics
 from rest_framework.response import Response
-from rest_framework import status, generics
+from rest_framework import status, generics, mixins
 from rest_framework.permissions import DjangoModelPermissions, AllowAny, IsAuthenticated
 from rest_framework import mixins
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -76,13 +76,13 @@ class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     pagination_class = StandardResultsSetPagination
 
-    def list(self, request, pk, sprint_id):
-        queryset = self.queryset.filter(sprint_id=sprint_id)
+    def list(self, request, project_pk, sprint_pk):
+        queryset = self.queryset.filter(sprint_id=sprint_pk)
         serializer = TaskSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def create(self, request, pk, sprint_id):
-        context = { 'sprint': sprint_id }
+    def create(self, request, project_pk, sprint_pk):
+        context = { 'sprint': sprint_pk }
         serializer = TaskSerializer(data=request.data, context=context)
         if serializer.is_valid():
             serializer.save()
@@ -143,7 +143,7 @@ class SprintViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class BoardViewSet(generics.ListAPIView):
+class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
     permissions_classes = (IsAuthenticated,)
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
