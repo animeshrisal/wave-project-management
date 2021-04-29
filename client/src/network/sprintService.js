@@ -12,6 +12,15 @@ const getSprintList = (projectId) => {
         })
 }
 
+const getBoardData = (projectId, sprintId) => {
+    return fetch(`${URL}/projects/${projectId}/sprints/${sprintId}/board`, authenticatedGetRequestOption())
+        .then(handleResponse)
+        .then(tasks => {
+            return tasks;
+        })
+}
+
+
 const createSprint = () => {
 
 }
@@ -33,7 +42,8 @@ const sprintService = {
     createSprint,
     getSprintDetail,
     updateSprint,
-    deleteSprint
+    deleteSprint,
+    getBoardData
 }
 
 export default sprintService;
