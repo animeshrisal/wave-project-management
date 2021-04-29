@@ -9,18 +9,18 @@ function authHeader() {
 
 const camelToSnakeCase = str => str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 
-export function authenticatedPostRequestGenerator(values= {}) {
+export function authenticatedRequestGenerator(values= {}, method='POST') {
 
     const formData = new FormData();
 
     const requestOption = {
-        method: 'POST',
+        method,
         headers: authHeader(),
     }
 
     if  (Object.keys(values).length !== 0){
         for ( var key in values ) {
-            formData.append(camelToSnakeCase(key), formData[key]);
+            formData.append(camelToSnakeCase(key), values[key]);
         }
     }
 
