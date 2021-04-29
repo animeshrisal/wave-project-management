@@ -36,6 +36,7 @@ urlpatterns = [
     path('my_profile/', views.MyProfileView.as_view(), name='my_profile'),
     path('projects/<int:pk>/sprints/', views.SprintViewSet.as_view({'get': 'list', 'post': 'create'}), name='project-task'),
     path('projects/<int:pk>/sprints/<int:sprint_id>/', views.SprintViewSet.as_view({'put': 'update', 'delete': 'destroy'}), name='project-task'),
+    path('projects/<int:pk>/sprints/<int:sprint_id>/board/', views.BoardViewSet.as_view(), name='board'),
     path('projects/<int:pk>/sprints/<int:sprint_id>/tasks/', views.TaskViewSet.as_view({'get': 'list', 'post': 'create'}), name='project-task'),
     path('projects/<int:id>/sprints/<int:sprint_id>/tasks/<int:task_id>/', views.TaskViewSet.as_view({'put': 'update', 'delete': 'destroy'}), name='project-task-details'),
     path('accept_invite/',views.InvitationView.as_view(), name='accept_invite'),

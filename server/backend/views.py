@@ -142,3 +142,23 @@ class SprintViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class BoardViewSet(generics.ListAPIView):
+    permissions_classes = (IsAuthenticated,)
+    serializer_class = TaskSerializer
+    queryset = Task.objects.all()
+
+    def group_by_task_status(self, data):
+        grouped = dict()
+        for obj in data:
+            grouped.setdefault(obj['task_status'], []).append(obj)
+        return grouped
+
+    def list(self, request, pk, sprint_id):
+        queryset = self.queryset.filter(sprint_id=sprint_id)
+        serializer = TaskSerializer(queryset, many=True)
+        grouped_data = self.group_by_task_status(serializer.data)
+        return Response(grouped_data)
+
+
+
