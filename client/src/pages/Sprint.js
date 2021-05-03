@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import TaskTable from "../components/TaskTable";
 import sprintService from "../network/sprintService";
+import "./Sprint.scss";
 
 
 export default function Task(props) {
@@ -26,6 +27,7 @@ export default function Task(props) {
       { data.map(sprint => (
         <div>
           <div onClick={() => goToBoard(sprint.id)}>Go to Board</div>
+          <div>{sprint.name}</div>
           <TaskTable goToBoard={goToBoard} data={sprint.tasks} />
         </div>
       ))}

@@ -28,65 +28,79 @@ const Board = () => {
         }
     );
 
-
     const [state, setState] = useState([]);
     const [state1, setState1] = useState([]);
     const [state2, setState2] = useState([]);
     const [state3, setState3] = useState([]);
-
-
 
     if (isLoading) return "Loading...";
 
     if (error) return "Error...";
 
     return (
-        <React.Fragment>
-            <ReactSortable 
-                style={{padding: '50px', background: 'red'}}
-                onAdd = {(e) => changeStatus(e, 1)}
-                group="board"
-                animation={200} 
-                list={state} 
-                setList={setState} >
-                {state.map((item) => (
-                    <div key={item.id}>{item.name}</div>
-                ))}
-            </ReactSortable>
-            <ReactSortable 
-                style={{padding: '50px', background: 'blue'}}
-                onAdd = {(e) => changeStatus(e, 2)}
-                group="board"
-                animation={200} 
-                list={state1} 
-                setList={setState1} >
-                {state1.map((item) => (
-                    <div key={item.id}>{item.name}</div>
-                ))}
-            </ReactSortable>
-            <ReactSortable 
-                style={{padding: '50px', background: 'yellow'}}
-                onAdd = {(e) => changeStatus(e, 3)}
-                group="board"
-                animation={200} 
-                list={state2} 
-                setList={setState2} >
-                {state2.map((item) => (
-                    <div key={item.id}>{item.name}</div>
-                ))}
-            </ReactSortable>
-            <ReactSortable 
-                style={{padding: '50px', background: 'purple'}}
-                onAdd = {(e) => changeStatus(e, 4)}
-                group="board"
-                animation={200} 
-                list={state3} 
-                setList={setState3} >
-                {state3.map((item) => (
-                    <div key={item.id}>{item.name}</div>
-                ))}
-            </ReactSortable>
-        </React.Fragment>    
+        <div className='grid-container'>
+            <div className = 'grid-item'>
+                <div className = 'grid-header'>
+                    Test
+                </div>
+                <ReactSortable 
+                emptyInsertThreshold={50}
+                    className='grid-body'
+                    onAdd = {(e) => changeStatus(e, 1)}
+                    group="board"
+                    list={state} 
+                    setList={setState} >
+                    {state.map((item) => (
+                        <div key={item.id}>{item.name}</div>
+                    ))}
+                </ReactSortable>
+            </div>
+            <div className = 'grid-item'>
+                <div className = 'grid-header'>
+                    Test
+                </div>
+                <ReactSortable 
+                  className='grid-body'
+                    onAdd = {(e) => changeStatus(e, 2)}
+                    group="board"
+                    list={state1} 
+                    setList={setState1} >
+                    {state1.map((item) => (
+                        <div key={item.id}>{item.name}</div>
+                    ))}
+                </ReactSortable>
+            </div>
+            <div className = 'grid-item'>
+                <div className = 'grid-header'>
+                    Test
+                </div>
+                <ReactSortable 
+                  className='grid-body'
+                    onAdd = {(e) => changeStatus(e, 3)}
+                    group="board"
+                    list={state2} 
+                    setList={setState2} >
+                    {state2.map((item) => (
+                        <div key={item.id}>{item.name}</div>
+                    ))}
+                </ReactSortable>
+            </div>
+            <div className = 'grid-item'>
+                <div className = 'grid-header'>
+                    Test
+                </div>
+                <ReactSortable 
+                  className='grid-body'
+                    onAdd = {(e) => changeStatus(e, 4)}
+                    group="board"
+                    list={state3} 
+                    setList={setState3} >
+                    {state3.map((item) => (
+                        <div key={item.id}>{item.name}</div>
+                    ))}
+                </ReactSortable>
+            </div>
+        </div>    
     )
 }
 
