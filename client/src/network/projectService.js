@@ -2,6 +2,7 @@ import {
   handleResponse,
   authenticatedGetRequestOption,
   URL,
+  authenticatedRequestGenerator,
 } from "../helpers";
 
 export const getProjectList = () => {
@@ -13,7 +14,9 @@ export const getProjectList = () => {
     });
 };
 
-const createProject = () => {};
+const createProject = (project) => {
+  return fetch(`${URL}/projects/`, authenticatedRequestGenerator(project, 'POST'))
+};
 
 const getProjectDetail = () => {};
 
