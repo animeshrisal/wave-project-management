@@ -117,7 +117,7 @@ class SprintSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=Project.objects.all())]
     )
 
-    tasks = TaskSerializer(many=True)
+    tasks = TaskSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         sprint = Sprint.objects.create(name=validated_data['name'], project_id=self.context['project'])
