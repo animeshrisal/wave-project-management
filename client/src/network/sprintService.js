@@ -35,7 +35,12 @@ const updateTaskStatus = (projectId, sprintId, values) => {
   );
 };
 
-const createSprint = () => {};
+const createSprint = (projectId, sprint) => {
+    return fetch(
+        `${URL}/projects/${projectId}/sprints/`,
+        authenticatedRequestGenerator(sprint, "POST")
+      );
+};
 
 const getSprintDetail = () => {};
 
