@@ -7,17 +7,16 @@ import { useMutation } from "react-query";
 import { Redirect } from "react-router-dom";
 import { useAuthentication } from "../context/AuthContext";
 
-const Login = (props) => {
+const Login = () => {
+  const { dispatch } = useAuthentication();
 
-  const { dispatch } = useAuthentication()
-    
   const mutation = useMutation((user) => authenticationService.login(user));
 
   if (mutation.isSuccess) {
     dispatch({
-      type: 'LOGIN',
-      payload: mutation.data
-    })
+      type: "LOGIN",
+      payload: mutation.data,
+    });
     return <Redirect to="/projects" />;
   }
 
