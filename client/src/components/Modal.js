@@ -9,8 +9,8 @@ const Modal = (props) => {
             { props.visible ? 
             (
                 <div className="modal">
+                    <button className="close-button" onClick={props.onCancel}>X</button>
                     { props.children }
-                    <button onClick={props.onCancel}>Cancel </button>
                 </div> 
             ) : null }
         </div>
