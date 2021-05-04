@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useQuery } from "react-query";
+import Modal from "../components/Modal";
 import ProjectCard from "../components/ProjectCard";
 import projectService from "../network/projectService";
 
@@ -12,6 +13,21 @@ export default function Project(props) {
     projectService.getProjectList
   );
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+
   if (isLoading) return "Loading...";
 
   if (error) return "Error...";
@@ -22,9 +38,13 @@ export default function Project(props) {
 
   return (
     <React.Fragment>
-      <div>
-        Add new project
-      </div>
+          <Modal visible={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            >
+              Add Project
+          </Modal>
+          <button onClick={showModal} />
       <div className="grid-container">
         {
           data.map(project => 
