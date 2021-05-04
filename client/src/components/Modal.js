@@ -10,8 +10,7 @@ const Modal = (props) => {
             (
                 <div className="modal">
                     { props.children }
-                    <button onClick={props.onOk}> A </button>
-                    <button onClick={props.onCancel}>A </button>
+                    <button onClick={props.onCancel}>Cancel </button>
                 </div> 
             ) : null }
         </div>
