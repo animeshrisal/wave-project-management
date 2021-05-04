@@ -7,11 +7,9 @@ import Modal from "../components/Modal";
 import ProjectCard from "../components/ProjectCard";
 import projectService from "../network/projectService";
 
-import "./Project.scss"
+import "./Project.scss";
 
 export default function Project(props) {
-
-
   const queryClient = useQueryClient();
   const { isLoading, data, error } = useQuery(
     "projects",
@@ -32,57 +30,54 @@ export default function Project(props) {
     setIsModalVisible(false);
   };
 
-  const mutation = useMutation((project) => projectService.createProject(project), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("projects")
+  const mutation = useMutation(
+    (project) => projectService.createProject(project),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("projects");
+      },
     }
-  });
-
+  );
 
   if (isLoading) return "Loading...";
 
   if (error) return "Error...";
 
   const goToProjectDetails = (id) => {
-    props.history.push(`/projects/${id}`)
-  }
+    props.history.push(`/projects/${id}`);
+  };
 
   return (
     <React.Fragment>
-          <Modal visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
-            >
-              Add Project
-              <Formik
-                initialValues={{name: ''}}
-                onSubmit={async (values) => {
-                  mutation.mutate(values)
-                }}
-              >
-                {({isSubmitting}) => (
-                <Form>
-                  <label htmlFor="name">Project Name</label>
-                  <Field id="name" name="name" placeholder="Example" />
-                  <button type="submit" disabled={isSubmitting} >
-                    Submit
-                  </button>
-                </Form>
-                )}
-              </Formik>
-          </Modal>
-          <button onClick={showModal} />
+      <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        Add Project
+        <Formik
+          initialValues={{ name: "" }}
+          onSubmit={async (values) => {
+            mutation.mutate(values);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <label htmlFor="name">Project Name</label>
+              <Field id="name" name="name" placeholder="Example" />
+              <button type="submit" disabled={isSubmitting}>
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
+      <button onClick={showModal}> Add Project </button>
       <div className="grid-container">
-        {
-          data.map(project => 
-            <ProjectCard 
-              goToProjectDetails={goToProjectDetails} 
-              key={project.id} 
-              className="grid-item" 
-              project={project} 
-              />
-            )
-        }
+        {data.map((project) => (
+          <ProjectCard
+            goToProjectDetails={goToProjectDetails}
+            key={project.id}
+            className="grid-item"
+            project={project}
+          />
+        ))}
       </div>
     </React.Fragment>
   );

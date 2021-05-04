@@ -9,5 +9,5 @@ const getMyProfile = () => {
 };
 
 export const userService = {
-  getMyProfile
+  getMyProfile,
 };

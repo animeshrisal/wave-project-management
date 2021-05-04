@@ -6,7 +6,6 @@ import {
 } from "../helpers";
 
 export const getProjectList = () => {
-
   return fetch(`${URL}/projects/`, authenticatedGetRequestOption())
     .then(handleResponse)
     .then((projects) => {
@@ -15,7 +14,10 @@ export const getProjectList = () => {
 };
 
 const createProject = (project) => {
-  return fetch(`${URL}/projects/`, authenticatedRequestGenerator(project, 'POST'))
+  return fetch(
+    `${URL}/projects/`,
+    authenticatedRequestGenerator(project, "POST")
+  );
 };
 
 const getProjectDetail = () => {};
