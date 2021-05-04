@@ -56,10 +56,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
-    def list(self, request):
-        serializer = ProjectSerializer(self.queryset, many=True)
-        return Response(serializer.data)
-
     def create(self, request):
         context = {'owned_by': request.user}
         serializer = ProjectSerializer(data=request.data, context=context)
