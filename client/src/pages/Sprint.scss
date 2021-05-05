@@ -1,17 +1,38 @@
 .grid-container {
     display: grid;
     grid-column-gap: 5px;
-    grid-row-gap: 5px;
+    grid-row-gap: 1px;
     grid-template-columns: auto auto auto auto;
     background: gray;
 
     .grid-item {
+        ::-webkit-scrollbar {
+            width: 10px;
+          }
+          
+          /* Track */
+          ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+          }
+           
+          /* Handle */
+          ::-webkit-scrollbar-thumb {
+            background: #888; 
+          }
+          
+          /* Handle on hover */
+          ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+          }
+
         .grid-body {
             border-style: solid;
             border-width: 5px;
-            width: 200px;
-            height: 500px;
+            width: 400px;
+            height: 750px;
             margin: 5px;
+            overflow-y: auto;
+            
         }
     }
 }
