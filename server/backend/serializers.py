@@ -11,6 +11,9 @@ from .models import Project, Task, User, Notification, Sprint
 
 from .helpers import StandardResultsSetPagination
 
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
+
 class WaveTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
@@ -89,6 +92,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             project = Project.objects.create(name=validated_data['name'],owned_by=self.context['owned_by'])
             project.members.add(self.context['owned_by'])
+
             return project
 
     class Meta:
@@ -117,12 +121,10 @@ class SprintSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=Project.objects.all())]
     )
 
-    tasks = TaskSerializer(many=True, read_only=True)
-
     def create(self, validated_data):
         sprint = Sprint.objects.create(name=validated_data['name'], project_id=self.context['project'])
         return sprint
 
     class Meta:
         model = Sprint
-        fields = ('id', 'name', 'tasks')
+        fields = ('id', 'name')

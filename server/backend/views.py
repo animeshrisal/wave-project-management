@@ -4,6 +4,8 @@ from .helpers import StandardResultsSetPagination, WavePermissions
 
 from .models import Project, Task, User, User, Sprint
 
+from .permissions import HasProjectAccess
+
 from rest_framework import routers, serializers, viewsets, generics
 from rest_framework.response import Response
 from rest_framework import status, generics, mixins
@@ -52,9 +54,14 @@ class PermissionListApi(generics.ListAPIView):
     pagination_class = StandardResultsSetPagination
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    permission_classes = [WavePermissions]
+    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+
+    def list(self, request):
+        queryset = self.queryset.filter(members=request.user)
+        serializer = ProjectSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request):
         context = {'owned_by': request.user}
@@ -67,7 +74,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
 
 class TaskViewSet(viewsets.ModelViewSet):
-    permission_classes = [WavePermissions]
+    permission_classes = [HasProjectAccess]
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
     pagination_class = StandardResultsSetPagination
@@ -112,16 +119,16 @@ class MyProfileView(generics.RetrieveAPIView):
         return Response(serializer.data)
 
 
-class NotificationView(generics.RetrieveUpdateAPIView):
+class NotificationView(generics.ListAPIView, mixins.UpdateModelMixin):
     permissions_classes = (IsAuthenticated,)
     serializer_class = NotificationSerializer
 
-    def retrieve(self, request):
+    def list(self, request):
         queryset = Notification.objects.all()
         serializer = NotificationSerializer
 
 class SprintViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticated,)
+    permission_classes = [HasProjectAccess]
     serializers = SprintSerializer    
     queryset = Sprint.objects.all()
 
