@@ -99,6 +99,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         model = Project
         fields = ('id', 'name')
 
+class ProjectMemberSerializer(serializers.Serializer):
+    member = serializers.IntegerField(allow_null=False)
+
 class TaskSerializer(serializers.ModelSerializer):
     
     def create(self, validated_data):

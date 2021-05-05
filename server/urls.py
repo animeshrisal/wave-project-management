@@ -34,6 +34,7 @@ urlpatterns = [
     path('token/', views.WaveTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('my_profile/', views.MyProfileView.as_view(), name='my_profile'),
+    path('projects/<int:project_pk>/project_member/', views.ProjectMemberViewSet.as_view(), name='invite-member'),
     path('projects/<int:project_pk>/sprints/', views.SprintViewSet.as_view({'get': 'list', 'post': 'create'}), name='project-task'),
     path('projects/<int:project_pk>/sprints/<int:pk>/', views.SprintViewSet.as_view({'put': 'update', 'delete': 'destroy'}), name='project-task'),
     path('projects/<int:project_pk>/sprints/<int:pk>/board/', views.BoardViewSet.as_view(), name='board'),

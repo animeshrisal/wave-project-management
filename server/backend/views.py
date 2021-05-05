@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .serializers import UserSerializer, GroupSerializer, PermissionSerializer, WaveTokenObtainPairSerializer
 from .serializers import TaskSerializer, ProjectSerializer, InvitationSerializer, NotificationSerializer, SprintSerializer
+from .serializers import ProjectMemberSerializer
 
 from django.shortcuts import redirect
 
@@ -71,7 +72,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class TaskViewSet(viewsets.ModelViewSet):
     permission_classes = [HasProjectAccess]
@@ -146,8 +146,9 @@ class SprintViewSet(viewsets.ModelViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
-    permissions_classes = (IsAuthenticated, HasProjectAccess)
+    permissions_classes = [HasProjectAccess]
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 
@@ -157,11 +158,36 @@ class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
             grouped.setdefault(obj['task_status'], []).append(obj)
         return grouped
 
-    def list(self, request, pk, sprint_id):
-        queryset = self.queryset.filter(sprint_id=sprint_id)
+    def list(self, request, project_pk, sprint_pk, pk):
+        queryset = self.queryset.filter(sprint_id=sprint_pk)
         serializer = TaskSerializer(queryset, many=True)
         grouped_data = self.group_by_task_status(serializer.data)
         return Response(grouped_data)
 
+class ProjectMemberViewSet(generics.CreateAPIView, generics.DestroyAPIView):
+    permission_classes= [HasProjectAccess]
+    serializer_class = ProjectMemberSerializer
 
+    def create(self, request, project_pk):
+        member = request.POST['user']
+        project = Project.objects.get(id=project_pk)
+        serializer = ProjectMemberSerializer(data={'member': member })
+        
+        if serializer.is_valid():
+            user = User.objects.get(id=member)
+            project.members.add(user) 
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def destroy(self, request,project_pk):
+        member = request.POST['user']
+        project = Project.objects.get(id=project_pk)
+        serializer = ProjectMemberSerializer(data={'member': member })
+        
+        if serializer.is_valid():
+            user = User.objects.get(id=member)
+            project.members.remove(user) 
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
