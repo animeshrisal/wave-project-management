@@ -132,13 +132,13 @@ class SprintViewSet(viewsets.ModelViewSet):
     serializers = SprintSerializer    
     queryset = Sprint.objects.all()
 
-    def list(self, request, pk):
-        queryset = self.queryset.filter(project_id=pk)
+    def list(self, request, project_pk):
+        queryset = self.queryset.filter(project_id=project_pk)
         serializer = SprintSerializer(queryset, many=True)
         return Response(serializer.data)
 
-    def create(self, request, pk):
-        context = { 'project': pk }
+    def create(self, request, project_pk):
+        context = { 'project': project_pk }
         serializer = SprintSerializer(data=request.data, context=context)
         if serializer.is_valid():
             serializer.save()
@@ -147,7 +147,7 @@ class SprintViewSet(viewsets.ModelViewSet):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
-    permissions_classes = (IsAuthenticated,)
+    permissions_classes = (IsAuthenticated, HasProjectAccess)
     serializer_class = TaskSerializer
     queryset = Task.objects.all()
 

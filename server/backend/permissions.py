@@ -6,6 +6,7 @@ import pprint
 class HasProjectAccess(BasePermission):
     def has_permission(self, request, view):
         try:
-            request.user and Project.objects.get(id=view.kwargs['pk'], members=request.user)
+            if Project.objects.get(id=view.kwargs['project_pk'], members=request.user.id):
+                return True
         except ObjectDoesNotExist:
             return False
