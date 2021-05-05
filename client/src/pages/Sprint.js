@@ -7,7 +7,7 @@ import TaskTable from "../components/TaskTable";
 import sprintService from "../network/sprintService";
 import "./Sprint.scss";
 
-export default function Task(props) {
+function Sprint(props) {
   const { projectId } = useParams();
   const queryClient = useQueryClient();
 
@@ -22,6 +22,7 @@ export default function Task(props) {
     {
       onSuccess: () => {
         queryClient.invalidateQueries("tasks");
+        handleOk()
       },
     }
   );
@@ -32,6 +33,7 @@ export default function Task(props) {
 
   const handleOk = () => {
     setIsModalVisible(false);
+
   };
 
   const handleCancel = () => {
@@ -70,11 +72,12 @@ export default function Task(props) {
       <button onClick={showModal}> Add Sprint </button>
       {data.map((sprint) => (
         <div>
-          <div onClick={() => goToBoard(sprint.id)}>Go to Board</div>
+          <div onClick={() => goToBoard(sprint.id)}>Go to task</div>
           <div>{sprint.name}</div>
-          <TaskTable goToBoard={goToBoard} data={sprint.tasks} />
         </div>
       ))}
     </div>
   );
 }
+
+export default Sprint; 
