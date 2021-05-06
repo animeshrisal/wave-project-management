@@ -22,14 +22,24 @@ const createProject = (project) => {
 
 const inviteMember = (projectId, user) => {
   return fetch(
-    `${URL}/projects/${projectId}/project_member`, authenticatedRequestGenerator({user}, "POST")
+    `${URL}/projects/${projectId}/project_member/`, authenticatedRequestGenerator(user, "POST")
   )
 }
 
 const removeMember = (projectId, user) => {
   return fetch(
-    `${URL}/projects/${projectId}/project_member`, authenticatedRequestGenerator({user}, "DELETE")
+    `${URL}/projects/${projectId}/project_member/`, authenticatedRequestGenerator(user, "DELETE")
   )
+}
+
+const getProjectMembers = (projectId) => {
+  return fetch(
+    `${URL}/projects/${projectId}/project_member/`, authenticatedGetRequestOption())
+    .then(handleResponse)
+    .then((projectMembers) => {
+      return projectMembers
+    })
+  
 }
 
 const getProjectDetail = () => {};
@@ -45,7 +55,8 @@ const projectService = {
   updateProject,
   deleteProject,
   inviteMember,
-  removeMember
+  removeMember,
+  getProjectMembers
 };
 
 export default projectService;

@@ -8,6 +8,15 @@ const getMyProfile = () => {
     });
 };
 
+const getUsersList = () => {
+  return fetch(`${URL}/users/`, authenticatedGetRequestOption())
+    .then(handleResponse)
+    .then((users) => {
+      return users;
+    })
+}
+
 export const userService = {
   getMyProfile,
+  getUsersList
 };

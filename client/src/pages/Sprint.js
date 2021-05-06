@@ -3,28 +3,63 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router";
 import Modal from "../components/Modal";
+import projectService from "../network/projectService";
 import sprintService from "../network/sprintService";
+import { userService } from "../network/userService";
 import "./Sprint.scss";
 
 function Sprint(props) {
   const { projectId } = useParams();
   const queryClient = useQueryClient();
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isInviteModalVisible, setIsInviteModalVisible] = useState(false);
+  const [members, setMembers] = useState([]);
+  const [userDropdown, setUserDropdown] = useState([]);
+
   const { isLoading, data, error } = useQuery(["sprint", projectId], () =>
     sprintService.getSprintList(projectId)
   );
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const { isSuccess } = useQuery(
+    ["project", "projectMembers", projectId],
+    () => projectService.getProjectMembers(projectId),
+    {
+      onSuccess: (member) => {
+        setMembers(member);
+      },
+    }
+  );
+
+
+  const { memberData } = useQuery(
+    ["project", "userDropdown"],
+    () => userService.getUsersList(),
+    {
+      onSuccess: (member) => {
+        setUserDropdown(member.results);
+      },
+    }
+  );
 
   const mutation = useMutation(
     (sprint) => sprintService.createSprint(projectId, sprint),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("tasks");
-        handleOk()
+        handleOk();
       },
     }
   );
+
+  const inviteMember = useMutation(
+    (user) => projectService.inviteMember(projectId, user),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("sprint");
+      }
+    }
+  )
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -32,11 +67,22 @@ function Sprint(props) {
 
   const handleOk = () => {
     setIsModalVisible(false);
-
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const showInviteModal = () => {
+    setIsInviteModalVisible(true);
+  };
+
+  const handleInviteOk = () => {
+    setIsInviteModalVisible(false);
+  };
+
+  const handleInviteCancel = () => {
+    setIsInviteModalVisible(false);
   };
 
   if (isLoading) return "Loading...";
@@ -68,9 +114,42 @@ function Sprint(props) {
           )}
         </Formik>
       </Modal>
+
+      {/* Invite Member Modal */}
+      <Modal
+        visible={isInviteModalVisible}
+        onOk={handleInviteOk}
+        onCancel={handleInviteCancel}
+      >
+        Invite member
+        <Formik
+          initialValues={{ user: "" }}
+          onSubmit={async (values) => {
+            inviteMember.mutate(values);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form>
+              <label htmlFor="invite">Invite Member</label>
+              <Field as="select" name="user">
+                { userDropdown.map((member) => (
+                  <option key={member.id} id={member.id} value={member.id}>
+                    {member.username}
+                  </option>
+                ))}
+              </Field>
+              <button type="submit" disabled={isSubmitting}>
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </Modal>
+      {/* End */}
       <button onClick={showModal}> Add Sprint </button>
+      <button onClick={showInviteModal}> Invite Member</button>
       {data.map((sprint) => (
-        <div>
+        <div key={sprint.id}>
           <div onClick={() => goToTasks(sprint.id)}>Go to task</div>
           <div>{sprint.name}</div>
         </div>
@@ -79,4 +158,4 @@ function Sprint(props) {
   );
 }
 
-export default Sprint; 
+export default Sprint;

@@ -47,8 +47,12 @@ export default function Project(props) {
     props.history.push(`/projects/${id}`);
   };
 
+  
+
   return (
     <React.Fragment>
+
+      {/* Add Project modal */}
       <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         Add Project
         <Formik
@@ -68,6 +72,10 @@ export default function Project(props) {
           )}
         </Formik>
       </Modal>
+
+      {/* End */}
+
+
       <button onClick={showModal}> Add Project </button>
       <div className="grid-container">
         {data.map((project) => (
