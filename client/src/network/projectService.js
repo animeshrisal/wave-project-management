@@ -20,6 +20,18 @@ const createProject = (project) => {
   );
 };
 
+const inviteMember = (projectId, user) => {
+  return fetch(
+    `${URL}/projects/${projectId}/project_member`, authenticatedRequestGenerator({user}, "POST")
+  )
+}
+
+const removeMember = (projectId, user) => {
+  return fetch(
+    `${URL}/projects/${projectId}/project_member`, authenticatedRequestGenerator({user}, "DELETE")
+  )
+}
+
 const getProjectDetail = () => {};
 
 const updateProject = () => {};
@@ -32,6 +44,8 @@ const projectService = {
   getProjectDetail,
   updateProject,
   deleteProject,
+  inviteMember,
+  removeMember
 };
 
 export default projectService;

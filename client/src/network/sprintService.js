@@ -11,8 +11,8 @@ const getSprintList = (projectId) => {
     authenticatedGetRequestOption()
   )
     .then(handleResponse)
-    .then((tasks) => {
-      return tasks;
+    .then((sprints) => {
+      return sprints;
     });
 };
 

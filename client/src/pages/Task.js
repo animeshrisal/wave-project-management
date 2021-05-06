@@ -3,25 +3,25 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router";
 import Modal from "../components/Modal";
-import sprintService from "../network/sprintService";
-import "./Sprint.scss";
+import taskService from "../network/taskService";
 
-function Sprint(props) {
-  const { projectId } = useParams();
+const Task = (props) => {
+  const { projectId, sprintId } = useParams();
   const queryClient = useQueryClient();
 
-  const { isLoading, data, error } = useQuery(["sprint", projectId], () =>
-    sprintService.getSprintList(projectId)
+  const { isLoading, data, error } = useQuery(
+    ["tasks", sprintId, projectId],
+    () => taskService.getTaskList(projectId, sprintId)
   );
 
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const mutation = useMutation(
-    (sprint) => sprintService.createSprint(projectId, sprint),
+    (task) => taskService.createTask(projectId, sprintId, task),
     {
       onSuccess: () => {
         queryClient.invalidateQueries("tasks");
-        handleOk()
+        handleOk();
       },
     }
   );
@@ -32,25 +32,24 @@ function Sprint(props) {
 
   const handleOk = () => {
     setIsModalVisible(false);
-
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
+  const goToBoard = (sprintId) => {
+    props.history.push(`/projects/${projectId}/sprint/${sprintId}/board`);
+  };
+
   if (isLoading) return "Loading...";
 
   if (error) return "Error...";
 
-  const goToTasks = (sprintId) => {
-    props.history.push(`/projects/${projectId}/sprint/${sprintId}/tasks`);
-  };
-
   return (
     <div>
       <Modal visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        Add Project
+        Add Task
         <Formik
           initialValues={{ name: "" }}
           onSubmit={async (values) => {
@@ -59,7 +58,7 @@ function Sprint(props) {
         >
           {({ isSubmitting }) => (
             <Form>
-              <label htmlFor="name">Sprint Name</label>
+              <label htmlFor="name">Task Name</label>
               <Field id="name" name="name" placeholder="Example" />
               <button type="submit" disabled={isSubmitting}>
                 Submit
@@ -68,15 +67,18 @@ function Sprint(props) {
           )}
         </Formik>
       </Modal>
-      <button onClick={showModal}> Add Sprint </button>
-      {data.map((sprint) => (
+      <button onClick={showModal}> Add Task</button>
+      <div onClick={() => goToBoard(sprintId)}>Go to Board</div>
+      
+      { data.map((task) => (
         <div>
-          <div onClick={() => goToTasks(sprint.id)}>Go to task</div>
-          <div>{sprint.name}</div>
+          <div>{task.name}</div>
+          <div>{task.taskPriority}</div>
         </div>
       ))}
     </div>
   );
-}
+};
 
-export default Sprint; 
+
+export default Task

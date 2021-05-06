@@ -12,6 +12,7 @@ import Sprint from "./pages/Sprint";
 import { AuthenticationProvider } from "./context/AuthContext";
 import Notification from "./pages/Notification";
 import Board from "./pages/Board";
+import Task from "./pages/Task";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,11 @@ function App() {
               exact
               path="/projects/:projectId"
               component={Sprint}
+            />
+            <PrivateRoute
+              exact
+              path="/projects/:projectId/sprint/:sprintId/tasks"
+              component={Task}
             />
             <PrivateRoute
               exact
