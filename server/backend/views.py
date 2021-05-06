@@ -158,8 +158,8 @@ class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
             grouped.setdefault(obj['task_status'], []).append(obj)
         return grouped
 
-    def list(self, request, project_pk, sprint_pk, pk):
-        queryset = self.queryset.filter(sprint_id=sprint_pk)
+    def list(self, request, project_pk, pk):
+        queryset = self.queryset.filter(sprint_id=pk)
         serializer = TaskSerializer(queryset, many=True)
         grouped_data = self.group_by_task_status(serializer.data)
         return Response(grouped_data)
