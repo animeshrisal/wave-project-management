@@ -164,9 +164,15 @@ class BoardViewSet(generics.ListAPIView, mixins.UpdateModelMixin):
         grouped_data = self.group_by_task_status(serializer.data)
         return Response(grouped_data)
 
-class ProjectMemberViewSet(generics.CreateAPIView, generics.DestroyAPIView):
+class ProjectMemberViewSet(generics.ListCreateAPIView, generics.DestroyAPIView):
     permission_classes= [HasProjectAccess]
-    serializer_class = ProjectMemberSerializer
+    serializer_class = UserSerializer
+
+    def list(self, request, project_pk):
+        project = Project.objects.get(id=project_pk)
+        queryset = project.members.all()
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
 
     def create(self, request, project_pk):
         member = request.POST['user']
