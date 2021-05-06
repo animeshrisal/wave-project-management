@@ -3,18 +3,25 @@ import React, { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { useParams } from "react-router";
 import Modal from "../components/Modal";
+import TaskTable from "../components/TaskTable";
 import taskService from "../network/taskService";
 
 const Task = (props) => {
   const { projectId, sprintId } = useParams();
   const queryClient = useQueryClient();
 
-  const { isLoading, data, error } = useQuery(
-    ["tasks", sprintId, projectId],
-    () => taskService.getTaskList(projectId, sprintId)
-  );
-
+  const [tasks, setTasks] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const { isLoading, error } = useQuery(
+    ["tasks", sprintId, projectId],
+    () => taskService.getTaskList(projectId, sprintId),
+    {
+      onSuccess: (data) => {
+        setTasks(data);
+      },
+    }
+  );
 
   const mutation = useMutation(
     (task) => taskService.createTask(projectId, sprintId, task),
@@ -69,16 +76,10 @@ const Task = (props) => {
       </Modal>
       <button onClick={showModal}> Add Task</button>
       <div onClick={() => goToBoard(sprintId)}>Go to Board</div>
-      
-      { data.map((task) => (
-        <div>
-          <div>{task.name}</div>
-          <div>{task.taskPriority}</div>
-        </div>
-      ))}
+
+      <TaskTable data={tasks} />
     </div>
   );
 };
 
-
-export default Task
+export default Task;
